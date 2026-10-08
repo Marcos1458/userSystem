@@ -2,6 +2,21 @@ const form = document.querySelector("#formCadastro");
 const cep = document.querySelector("#cep");
 const buscarCep = document.querySelector("#buscarCep");
 
+function mensagem(texto, tipo = "sucesso") {
+    Toastify({
+        text: texto,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        style: {
+            background: tipo === "sucesso"
+                ? "#198754"
+                : "#dc3545"
+        }
+    }).showToast();
+}
+
+
 // Escuta o evento do formulário
 form.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -21,10 +36,9 @@ buscarCep.addEventListener("click", async function () {
     const valor = cep.value.replace(/\D/g, "");
 
     if (valor.length !== 8) {
-        alert("Digite um cep válido");
+        mensagem("Digite um cep válido", "erro");
         return;
     }
-
     try {
         const resposta = await fetch(`https://viacep.com.br/ws/${valor}/json`);
         const dados = await resposta.json();
